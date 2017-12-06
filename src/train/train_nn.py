@@ -2,7 +2,6 @@ import src.nn.network as network
 import src.config as config
 import tensorflow as tf
 import src.data.data_getter as data_getter
-import os
 
 CNT_EPOCH = 100
 REGULARIZATION_RATE = 0.0001
@@ -64,5 +63,5 @@ if __name__ == "__main__":
 
                 if step % 1000 == 0:
                     print('step# {}, loss = {}'.format(step, loss_value))
-                    saver.save(sess, os.path.join("../..", config.MODEL_PATH), global_step=global_step)
+                    saver.save(sess, config.MODEL_PATH, global_step=global_step)
 

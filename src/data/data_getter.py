@@ -43,7 +43,7 @@ def convert_origin_data_to_training_data(origin_datas, weeks):
     return training_data
 
 
-def get_train_data(path="../../data/origin/", weeks=config.CNT_PERIOD):
+def get_train_data_dict(path="../../data/origin/", weeks=config.CNT_PERIOD):
     if path == config.DATA_PATH and config.TRAIN_DATA_DICT is not None:
         return config.TRAIN_DATA_DICT
     else:
@@ -69,7 +69,7 @@ def get_test_ids(bind_data_dict):
 
 
 def get_training_data_set(weeks, path="../../data/origin/"):
-    train_data_dict = get_train_data(path, weeks)
+    train_data_dict = get_train_data_dict(path, weeks)
     test_ids = get_test_ids(train_data_dict)
     training_data = []
     for id, datas in train_data_dict.items():
@@ -79,13 +79,13 @@ def get_training_data_set(weeks, path="../../data/origin/"):
 
 
 def get_test_data_set(weeks, path="../../data/origin/"):
-    train_data_dict = get_train_data(path, weeks)
+    train_data_dict = get_train_data_dict(path, weeks)
     test_ids = get_test_ids(train_data_dict)
-    training_data = []
+    test_data = []
     for id, datas in train_data_dict.items():
         if id in test_ids:
-            training_data += datas
-    return [data.features for data in training_data], [data.label for data in training_data]
+            test_data += datas
+    return [data.features for data in test_data], [data.label for data in test_data]
 
 
 # if __name__ == "__main__":

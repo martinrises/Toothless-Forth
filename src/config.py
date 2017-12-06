@@ -20,7 +20,7 @@ SHAPE = [N_INPUT,
          N_OUTPUT
          ]
 
-MODEL_PATH = '/model/toothless.ckpt'
+MODEL_PATH = '../../model/toothless.ckpt'
 SUMMARY_PATH = '../../summary/'
 
 DATA_PATH = None
