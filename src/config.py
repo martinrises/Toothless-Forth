@@ -1,22 +1,13 @@
-CNT_DAYS_A_PERIOD = 5
-CNT_PERIOD = 20
+CNT_DAYS_A_PERIOD = 20
+CNT_PERIOD = 6
 CNT_FEATURE_OF_UNIT = 4
 
 N_INPUT = CNT_PERIOD * CNT_FEATURE_OF_UNIT
 N_OUTPUT = 2
 SHAPE = [N_INPUT,
-         96,
-         128,
-         144,
-         144,
-         144,
-         128,
-         96,
-         64,
-         32,
          16,
-         8,
-         4,
+         16,
+         16,
          N_OUTPUT
          ]
 
