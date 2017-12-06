@@ -13,7 +13,7 @@ def layer(input_tensor, index, in_nodes_cnt, out_nodes_cnt, regularizer, use_act
         weights = get_weight_variable([in_nodes_cnt, out_nodes_cnt], regularizer)
         biases = tf.get_variable('biases', [out_nodes_cnt], initializer=tf.truncated_normal_initializer(mean=1, stddev=0.1))
         if use_action:
-            return tf.nn.tanh(tf.matmul(input_tensor, weights) + biases)
+            return tf.nn.relu(tf.matmul(input_tensor, weights) + biases)
         else:
             return tf.matmul(input_tensor, weights) + biases
 
