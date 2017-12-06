@@ -6,7 +6,7 @@ import src.data.data_getter as data_getter
 CNT_EPOCH = 100
 REGULARIZATION_RATE = 0.0001
 MOVING_AVERAGE_DECAY = 0.99
-LEARNING_RATE_BASE = 0.01
+LEARNING_RATE_BASE = 0.1
 LEARNING_RATE_DECAY = 0.99
 BATCH_SIZE = 16
 
@@ -33,8 +33,11 @@ if __name__ == "__main__":
         len(training_labels)/BATCH_SIZE,
         LEARNING_RATE_DECAY
     )
-    train_step = tf.train.GradientDescentOptimizer(learning_rate).minimize(loss, global_step=global_step)
+    train_step = tf.train.AdamOptimizer(learning_rate).minimize(loss, global_step=global_step)
     train_op = tf.group(train_step, variable_averages_op)
+
+    correction_prediction = tf.equal(tf.argmax(y, 1), tf.argmax(y_, 1))
+    accuracy = tf.reduce_mean(tf.cast(correction_prediction, tf.float32))
 
     with tf.name_scope("summary"):
         tf.summary.scalar("train_loss", loss)
@@ -52,16 +55,17 @@ if __name__ == "__main__":
             for n_batch in range(len(training_labels) // BATCH_SIZE):
                 xs = training_features[n_batch * BATCH_SIZE: (n_batch+1) * BATCH_SIZE]
                 ys = training_labels[n_batch * BATCH_SIZE: (n_batch+1) * BATCH_SIZE]
-                _, loss_value, train_summary, step = sess.run([train_op, loss, merged_summary, global_step], feed_dict={x: xs, y_: ys})
+                _, train_summary, step = sess.run([train_op, merged_summary, global_step]
+                                                  , feed_dict={x: xs, y_: ys})
                 train_writer.add_summary(train_summary, global_step=step)
 
-                test_summary = sess.run(merged_summary, feed_dict={
+                loss_value, test_summary, accuracy_value = sess.run([loss, merged_summary, accuracy], feed_dict={
                     x: test_features,
                     y_: test_labels
                 })
                 test_writer.add_summary(test_summary, global_step=step)
 
                 if step % 1000 == 0:
-                    print('step# {}, loss = {}'.format(step, loss_value))
+                    print('step# {}, loss = {}, accuracy = {}'.format(step, loss_value, accuracy_value))
                     saver.save(sess, config.MODEL_PATH, global_step=global_step)
 
