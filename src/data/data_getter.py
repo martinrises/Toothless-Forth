@@ -37,8 +37,8 @@ def get_origin_data_dict(path="../../data/origin/"):
 
 def convert_origin_data_to_training_data(origin_datas, weeks):
     training_data = []
-    for i in range(weeks * config.CNT_DAYS_A_PERIOD, len(origin_datas)-config.CNT_DAYS_A_PERIOD):
-        training_data.append(TrainData(origin_datas[i - weeks * config.CNT_DAYS_A_PERIOD:i],
+    for i in range(weeks * config.CNT_DAYS_A_PERIOD - 1, len(origin_datas)-config.CNT_DAYS_A_PERIOD):
+        training_data.append(TrainData(origin_datas[i - weeks * config.CNT_DAYS_A_PERIOD + 1:i+1],
                                        origin_datas[i+1: i+config.CNT_DAYS_A_PERIOD+1]))
     return training_data
 
@@ -68,6 +68,14 @@ def get_test_ids(bind_data_dict):
     return test_ids
 
 
+def get_all_data_set(weeks, path="../../data/origin/"):
+    train_data_dict = get_train_data_dict(path, weeks)
+    all_data = []
+    for _, datas in train_data_dict.items():
+        all_data += datas
+    return [data.features for data in all_data], [data.label for data in all_data]
+
+
 def get_training_data_set(weeks, path="../../data/origin/"):
     train_data_dict = get_train_data_dict(path, weeks)
     test_ids = get_test_ids(train_data_dict)
@@ -88,7 +96,7 @@ def get_test_data_set(weeks, path="../../data/origin/"):
     return [data.features for data in test_data], [data.label for data in test_data]
 
 
-# if __name__ == "__main__":
-#     tmp = get_test_data_set(2)
-#     print(tmp)
+if __name__ == "__main__":
+    tmp = get_test_data_set(config.CNT_PERIOD)
+    print(tmp[1])
 
